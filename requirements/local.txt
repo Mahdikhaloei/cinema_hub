@@ -1,0 +1,25 @@
+-r base.txt
+
+Werkzeug[watchdog]==3.0.4 # https://github.com/pallets/werkzeug
+ipdb==0.13.13  # https://github.com/gotcha/ipdb
+watchfiles==0.23.0  # https://github.com/samuelcolvin/watchfiles
+
+# Testing
+# ------------------------------------------------------------------------------
+mypy==1.11.2  # https://github.com/python/mypy
+django-stubs==5.0.4  # https://github.com/typeddjango/django-stubs
+djangorestframework-stubs==3.15.0  # https://github.com/typeddjango/djangorestframework-stubs
+
+# Code quality
+# ------------------------------------------------------------------------------
+coverage==7.6.1  # https://github.com/nedbat/coveragepy
+pylint-django==2.5.5  # https://github.com/PyCQA/pylint-django
+pre-commit==3.8.0  # https://github.com/pre-commit/pre-commit
+ruff==0.6.2  # https://github.com/astral-sh/ruff
+
+# Django
+# ------------------------------------------------------------------------------
+factory-boy==3.3.1  # https://github.com/FactoryBoy/factory_boy
+django-debug-toolbar==4.4.6  # https://github.com/jazzband/django-debug-toolbar
+django-extensions==3.2.3  # https://github.com/django-extensions/django-extensions
+django-coverage-plugin==3.1.0  # https://github.com/nedbat/django_coverage_plugin

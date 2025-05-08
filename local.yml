@@ -1,0 +1,32 @@
+version: "3"
+
+volumes:
+  cinemahub_local_postgres_data: {}
+
+services:
+  cinemahub: &cinemahub
+    build:
+      context: .
+      dockerfile: ./compose/local/cinemahub/Dockerfile
+    image: cinemahub
+    container_name: cinemahub
+    depends_on:
+      - cinemahub_db
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.cinemahub
+      - ./.envs/.local/.postgres
+    ports:
+      - "8000:8000"
+    command: /start
+
+  cinemahub_db:
+    image: postgres:14
+    container_name: cinemahub_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - cinemahub_local_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.envs/.local/.postgres
