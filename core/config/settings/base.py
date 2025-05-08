@@ -75,7 +75,8 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "apps.user"
+    "apps.user",
+    "apps.cinema"
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -83,7 +84,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = "user.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = "api/redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
