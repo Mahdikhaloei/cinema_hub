@@ -1,0 +1,15 @@
+[tool.ruff]
+exclude = [
+    "docs",
+    "migrations",
+    "apps.py",
+]
+ignore = ["S101", "S311"]
+line-length = 120
+select = ["E", "F", "Q", "S", "W"]
+
+[flake8-quotes]
+inline-quotes = "double"
+
+[tool.black]
+line-length = 120
