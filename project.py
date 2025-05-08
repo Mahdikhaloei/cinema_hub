@@ -28,6 +28,7 @@ def parse_args(arguments):  # noqa
     )
     run_parser.add_argument("-d", "--deamon-mode", help="Run the containers in the background", action="store_true")
     run_parser.add_argument("-b", "--build", help="Rebuild the image before running", action="store_true")
+    run_parser.add_argument("--no-cache", help="Do not use Docker cache when building", action="store_true")
 
     subparsers.add_parser("stop", help="Stop the running container.")
     restart_parser = subparsers.add_parser("restart", help="Restart the running container.")
@@ -92,12 +93,16 @@ class Interpreter:
         if not os.path.isfile(LOCAL_ENV_FILE):
             cls.setup()
 
-        command = ["docker-compose", f"-p {shlex.quote(PROJECT_NAME)}", "-f local.yml", "up"]
-        if args.deamon_mode:
-            command.append("-d")
         if args.build:
-            command.append("--build")
-        os.system(" ".join(command))
+            build_command = ["docker-compose", f"-p {shlex.quote(PROJECT_NAME)}", "-f local.yml", "build"]
+            if args.no_cache:
+                build_command.append("--no-cache")
+            os.system(" ".join(build_command))
+
+        up_command = ["docker-compose", f"-p {shlex.quote(PROJECT_NAME)}", "-f local.yml", "up"]
+        if args.deamon_mode:
+            up_command.append("-d")
+        os.system(" ".join(up_command))
 
     @classmethod
     def stop(cls, args: argparse.Namespace):
