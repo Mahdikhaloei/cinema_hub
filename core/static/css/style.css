@@ -1,0 +1,150 @@
+.navbar {
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+.navbar.scrolled {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.centered-form {
+    min-height: 100vh;
+    padding-top: 0;
+}
+
+.centered-form .col-md-6 {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.form-container {
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+
+.form-container .text-center h3 {
+    color: #007bff;
+}
+
+.form-container button {
+    background-color: #0056b3;
+    border: none;
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 3px;
+}
+
+.header-img-container {
+    width: 100%;
+    height: 600px;
+    position: relative;
+    background-image: url("/static/images/HeaderImage.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+.hall-image {
+    background-image: url("/static/images/HallHeaderImage.jpg");
+}
+
+.header-img-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+    z-index: 1;
+}
+
+.header-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    z-index: 2;
+    text-align: center;
+}
+
+.hall-card {
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.hall-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.custom-btn {
+    border-radius: 0.5rem;
+    border: 1px solid #8C030E;
+    color: #8C030E;
+}
+
+.custom-btn:hover {
+    background-color: #8C030E;
+    color: white;
+}
+
+.custom-btn {
+    border-top-left-radius: 0;
+}
+
+.seats-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.seat-btn {
+    width: 40px;
+    height: 40px;
+    background-color: #8C030E;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.seat-btn.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.seat-btn.selected {
+    background-color: #28a745;
+}
+
+.seat-btn:hover:not(.disabled) {
+    background-color: #8c030eb9;
+}
+
+.alert {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    width: auto;
+    max-width: 400px;
+}
+
+.alert.fade {
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+.alert.dismissed {
+    opacity: 0;
+}
