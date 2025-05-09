@@ -138,10 +138,8 @@ class Interpreter:
 
     @classmethod
     def django(cls, args: argparse.Namespace):
-        command = [
-            "docker-compose", f"-p {shlex.quote(PROJECT_NAME)}", "-f local.yml", "exec", "cinemahub", "python manage.py",
-            " ".join(args.action)
-        ]
+        project_tag = f"-p {shlex.quote(PROJECT_NAME)}"
+        command = ["docker-compose", project_tag, "-f local.yml", "exec", "cinemahub", "python manage.py"]
         os.system(" ".join(command))
 
     @classmethod
