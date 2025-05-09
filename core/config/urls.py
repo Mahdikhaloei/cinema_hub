@@ -1,17 +1,17 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.http import JsonResponse
 from django.urls import URLPattern, URLResolver, include, path
 from django.views import defaults as default_views
-
 
 TURLList = list[URLPattern | URLResolver]
 
 
 urlpatterns: TURLList = [
     path(settings.ADMIN_URL, admin.site.urls),
-    path("system-check/", lambda request: JsonResponse({"status": "ok", "version": "1.0.1"})),
+    path("auth/", include("apps.user.urls", namespace="auth")),
+    path("cinema/", include("apps.cinema.urls", namespace="cinema")),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
