@@ -139,8 +139,16 @@ class Interpreter:
     @classmethod
     def django(cls, args: argparse.Namespace):
         project_tag = f"-p {shlex.quote(PROJECT_NAME)}"
-        command = ["docker-compose", project_tag, "-f local.yml", "exec", "cinemahub", "python manage.py"]
-        os.system(" ".join(command))
+        extra_args = sys.argv[2:]
+        command = [
+            "docker-compose",
+            *project_tag.split(),
+            "-f", "local.yml",
+            "exec", "cinemahub",
+            "python", "manage.py",
+            *extra_args
+        ]
+        os.execvp(command[0], command)
 
     @classmethod
     def populate(cls, args: argparse.Namespace):
