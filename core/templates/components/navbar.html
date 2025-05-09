@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-dark" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+               color: white;">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'cinema:home' %}">CinemaHub</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <!-- Left nav items -->
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0 justify-content-center gap-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cinema:home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Movies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact Us</a>
+                </li>
+            </ul>
+
+            <!-- User section -->
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if request.user.first_name and request.user.last_name %}
+                        {{ request.user.first_name }} {{ request.user.last_name }}
+                        {% else %}
+                        {{ request.user.email }}
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'auth:logout' %}">Logout</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'auth:auth_request' %}">Sign In</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
