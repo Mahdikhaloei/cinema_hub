@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Showtimes for {{ hall.name }}{% endblock %}
+
+{% block content %}
+<div class="header-img-container hall-image">
+    <div class="header-text">
+        <h1>Showtimes for {{ hall.name }}</h1>
+        <p>You can reserve your seats here...</p>
+    </div>
+</div>
+<div class="container mt-4">
+    <h4 class="mb-4"></h4>
+    <div class="row g-4">
+        {% for showtime in showtimes %}
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 hall-card">
+                {% if showtime.movie.poster %}
+                <img src="{{ showtime.movie.poster.url }}" class="card-img-top" alt="{{ showtime.movie.title }} Poster">
+                {% else %}
+                <div class="card-img-top bg-secondary text-white text-center p-5">
+                    No Poster
+                </div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ showtime.movie.title }}</h5>
+
+                    <div class="card-details">
+                        <p class="card-text mb-1">
+                            <strong>Start:</strong> {{ showtime.start_time|date:"Y/m/d - H:i" }}
+                        </p>
+                        <p class="card-text mb-1">
+                            <strong>Total Capacity:</strong> {{ showtime.total_capacity }}
+                        </p>
+                        <p class="card-text">
+                            <strong>Remaining:</strong> {{ showtime.remaining_capacity }}
+                        </p>
+                    </div>
+
+                    {% if showtime.start_time > now %}
+                        <a href="javascript:void(0)" class="btn custom-btn mt-4" onclick="showSeats({{ showtime.id }})">Reserve Seat</a>
+                    {% else %}
+                        <span class="btn btn-secondary mt-4 disabled">Expired</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No showtimes available for this hall.</p>
+        {% endfor %}
+    </div>
+
+    <div class="modal" tabindex="-1" id="seatModal">
+        <div class="modal-dialog" id="modalDialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Please Select Your Ideal Seats</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="seats-container" id="seatsContainer">
+                        <!-- Seats will be dynamically added here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form id="seatReservationForm" method="post" action="{% url 'cinema:reserve_seats' 0 %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="showtime_id" id="inputShowtimeId">
+                        <input type="hidden" name="seat_ids" id="inputSeatIds">
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn custom-btn mt-auto" onclick="reserveSeats()">Reserve Selected Seats</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const reservedMap = {{ reserved_map| safe }};
+    const seatsMap = {{ seats_map| safe }};
+    const hallRows = {{ hall.rows }};
+    const seatsPerRow = {{ hall.seats_per_row }};
+    let selectedSeats = [];
+    let currentShowtimeId = null;  // <--- Add this line
+
+    function showSeats(showtimeId) {
+        currentShowtimeId = showtimeId;
+        selectedSeats = [];
+        const seatsContainer = document.getElementById("seatsContainer");
+        seatsContainer.innerHTML = '';
+
+        const bookedSeats = reservedMap[showtimeId] || [];
+        const seats = seatsMap[{{ hall.id }}] || [];
+
+    const rows = {};
+    seats.forEach(seat => {
+        if (!rows[seat.row]) rows[seat.row] = [];
+        rows[seat.row].push(seat);
+    });
+
+    Object.keys(rows).sort((a, b) => a - b).forEach(row => {
+        const rowDiv = document.createElement("div");
+        rowDiv.style.display = "flex";
+        rowDiv.style.justifyContent = "center";
+        rowDiv.style.gap = "10px";
+        rowDiv.style.marginBottom = "10px";
+
+        rows[row].sort((a, b) => a.seat_number - b.seat_number).forEach(seat => {
+            const seatBtn = document.createElement("button");
+            seatBtn.classList.add("seat-btn");
+            seatBtn.setAttribute("data-seat-id", seat.id);
+            seatBtn.innerText = seat.label;
+
+            if (bookedSeats.includes(seat.id)) {
+                seatBtn.classList.add("disabled");
+                seatBtn.disabled = true;
+            } else {
+                seatBtn.addEventListener("click", () => toggleSeatSelection(seatBtn));
+            }
+
+            rowDiv.appendChild(seatBtn);
+        });
+
+        seatsContainer.appendChild(rowDiv);
+    });
+
+    const modalDialog = document.getElementById("modalDialog");
+    const width = Math.min(1000, 60 + seatsPerRow * 50);
+    const height = Math.min(700, 100 + hallRows * 60);
+
+    modalDialog.style.maxWidth = width + "px";
+    modalDialog.style.maxHeight = height + "px";
+
+    new bootstrap.Modal(document.getElementById("seatModal")).show();
+    }
+
+    function toggleSeatSelection(button) {
+        const seatId = parseInt(button.getAttribute("data-seat-id"), 10);
+
+        if (button.classList.contains("selected")) {
+            button.classList.remove("selected");
+            selectedSeats = selectedSeats.filter(id => id !== seatId);
+        } else {
+            button.classList.add("selected");
+            selectedSeats.push(seatId);
+        }
+    }
+
+    function reserveSeats() {
+
+        document.getElementById("inputSeatIds").value = selectedSeats.join(",");
+        document.getElementById("inputShowtimeId").value = currentShowtimeId;
+
+        const form = document.getElementById("seatReservationForm");
+        form.action = `{% url 'cinema:reserve_seats' 0 %}`.replace("/0/", `/${currentShowtimeId}/`);
+
+        form.submit();
+    }
+</script>
+{% endblock %}

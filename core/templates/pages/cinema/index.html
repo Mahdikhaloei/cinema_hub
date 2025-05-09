@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="header-img-container">
+    <div class="header-text">
+        <h1>Welcome to CinemaHub</h1>
+        <p>Your destination for movies and entertainment</p>
+    </div>
+</div>
+<div class="container mt-5">
+    <div class="row">
+        {% for hall in halls %}
+        <div class="col-md-4 mb-4">
+            <div class="card hall-card shadow-sm h-100">
+                {% if hall.image %}
+                    <img src="{{ hall.image.url }}" alt="{{ hall.name }}">
+                {% else %}
+                    <img src="{% static 'images/DefaultImage.jpg' %}" alt="No image available">
+                {% endif %}
+
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ hall.name }}</h5>
+
+                    <p class="card-text fw-bold">Total Seats: {{ hall.total_seats }}</p>
+
+                    <a href="{% url 'cinema:hall_showtimes' hall.pk %}" class="btn custom-btn">See More</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
