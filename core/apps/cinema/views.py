@@ -110,4 +110,4 @@ class ReserveSeatsView(LoginRequiredMixin, View):
         ReservationService.create_reservation(request.user, showtime, seat_ids)
 
         messages.success(request, "Your reservation was successful")
-        return redirect("cinema:home")
+        return redirect("cinema:hall_showtimes", hall_id=showtime.hall.id)
