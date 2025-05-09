@@ -1,11 +1,12 @@
 from typing import Any
 
 from apps.cinema.models import CinemaHall, Reservation, ReservationSeat, Seat, Showtime
+from apps.user.models import User
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AnonymousUser
 from django.db import transaction
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect, response
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.timezone import now
 from django.views import View
@@ -26,7 +27,7 @@ class ShowtimeListView(ListView):
     template_name = "pages/cinema/hall_showtimes.html"
     context_object_name = "showtimes"
 
-    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> response.HttpResponseBase:
         self.hall = get_object_or_404(CinemaHall, id=self.kwargs["hall_id"])
         return super().dispatch(request, *args, **kwargs)
 
@@ -54,7 +55,7 @@ class ShowtimeListView(ListView):
             reservation__status__in=["PENDING", "CONFIRMED"]
         ).select_related("seat", "reservation")
 
-        reserved_map = {}
+        reserved_map: dict[int, list[int]] = {}
 
         for rs in reserved_seats:
             showtime_id = rs.reservation.showtime_id
@@ -93,6 +94,10 @@ class ReservationService:
 
 class ReserveSeatsView(LoginRequiredMixin, View):
     def post(self, request: HttpRequest, showtime_id: int) -> HttpResponseRedirect:
+        if isinstance(request.user, AnonymousUser):
+            messages.error(request, "You must be logged in to make a reservation.")
+            return redirect("cinema:login")
+
         seat_ids_input = request.POST.get("seat_ids", "")
         seat_ids = [int(i) for i in seat_ids_input.split(",") if i.isdigit()]
 

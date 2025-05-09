@@ -23,7 +23,7 @@ class User(AbstractUser, UUIDPrimaryKeyMixin):
     role = models.CharField(max_length=5, choices=UserRole.choices, default=UserRole.USER, verbose_name=_("role"))
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-    objects = CustomUserManager()
+    objects = CustomUserManager() # type: ignore
 
     def __str__(self) -> str:
         return self.email

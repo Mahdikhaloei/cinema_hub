@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Count
+from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from utils.mixins.models import Timestampable
@@ -161,7 +162,7 @@ class Showtime(Timestampable, models.Model):
         return queryset.aggregate(count=Count("id"))["count"]
 
     @property
-    def reserved_seats_list(self) -> list["ReservationSeat"]:
+    def reserved_seats_list(self) -> QuerySet["ReservationSeat"]:
         return ReservationSeat.objects.filter(
             reservation__showtime=self,
             reservation__status__in=["PENDING", "CONFIRMED"]
