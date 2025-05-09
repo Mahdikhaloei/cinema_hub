@@ -3,12 +3,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import URLPattern, URLResolver, include, path
 from django.views import defaults as default_views
+from django.views.generic import RedirectView
 
 TURLList = list[URLPattern | URLResolver]
 
 
 urlpatterns: TURLList = [
     path(settings.ADMIN_URL, admin.site.urls),
+    path("", RedirectView.as_view(pattern_name="cinema:home", permanent=False)),
     path("auth/", include("apps.user.urls", namespace="auth")),
     path("cinema/", include("apps.cinema.urls", namespace="cinema")),
 
