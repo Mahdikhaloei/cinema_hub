@@ -46,7 +46,7 @@ jobs:
       - name: Run docker-compose
         uses: ndeloof/install-compose-action@v0.0.1
 
-      - run: docker-compose -f local.yml run --rm print_vm python ./manage.py makemigrations --check --dry-run
+      - run: docker-compose -f local.yml run --rm cinemahub python ./manage.py makemigrations --check --dry-run
 
   mypy:
     runs-on: ubuntu-latest
@@ -62,7 +62,7 @@ jobs:
         uses: ndeloof/install-compose-action@v0.0.1
 
       - name: Run MYPY
-        run: docker-compose -f local.yml run --rm print_vm mypy --explicit-package-bases . --config-file=mypy.ini
+        run: docker-compose -f local.yml run --rm cinemahub mypy --explicit-package-bases . --config-file=mypy.ini
 
   tests:
     runs-on: ubuntu-latest
@@ -78,10 +78,10 @@ jobs:
         uses: ndeloof/install-compose-action@v0.0.1
 
       - name: Run DB Migrations
-        run: docker-compose -f local.yml run --rm print_vm python ./manage.py migrate
+        run: docker-compose -f local.yml run --rm cinemahub python ./manage.py migrate
 
       - name: Run Django Tests
-        run: docker-compose -f local.yml run --rm print_vm python ./manage.py test
+        run: docker-compose -f local.yml run --rm cinemahub python ./manage.py test
 
       - name: Tear down the Stack
         run: docker-compose -f local.yml down

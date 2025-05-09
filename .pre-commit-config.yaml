@@ -46,7 +46,7 @@ repos:
         name: check-migrations
         description: Dry run django makemigrations command to check migration issues
         stages: [push]
-        entry: sh -c "docker-compose -f local.yml -p print_vm_server exec -w //app/core -T print_vm python manage.py makemigrations --dry-run --check"
+        entry: sh -c "docker-compose -f local.yml -p cinemahub_server exec -w //app/core -T cinemahub python manage.py makemigrations --dry-run --check"
         language: system
         require_serial: true
       - id: mypy
@@ -57,12 +57,12 @@ repos:
           - django-stubs
           - djangorestframework-stubs
           - types-requests
-        entry: sh -c "docker-compose -f local.yml -p print_vm_server exec -w //app/core -T print_vm mypy --explicit-package-bases . --config-file=mypy.ini"
+        entry: sh -c "docker-compose -f local.yml -p cinemahub_server exec -w //app/core -T cinemahub mypy --explicit-package-bases . --config-file=mypy.ini"
       - id: run-tests
         name: tests
         description: Run django tests with docker
         stages: [push]
-        entry: sh -c "docker-compose -f local.yml -p print_vm_server exec -w //app/core -T print_vm python manage.py test --noinput"
+        entry: sh -c "docker-compose -f local.yml -p cinemahub_server exec -w //app/core -T cinemahub python manage.py test --noinput"
         language: system
         require_serial: true
 
