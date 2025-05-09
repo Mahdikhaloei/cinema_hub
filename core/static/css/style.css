@@ -148,3 +148,13 @@
 .alert.dismissed {
     opacity: 0;
 }
+
+#modalDialog {
+    min-width: 500px;
+    min-height: 300px;
+}
+
+#modalDialog .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+}
