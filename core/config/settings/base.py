@@ -72,6 +72,8 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "adminsortable2",
+    "crispy_forms",
+    "crispy_bootstrap5"
 ]
 
 LOCAL_APPS = [
@@ -253,3 +255,7 @@ LOGGING = {
 
 
 DOMAIN_NAME = "https://cinemahub.co"
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
