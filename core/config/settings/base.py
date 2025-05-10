@@ -5,6 +5,7 @@ from pathlib import Path
 
 import environ
 from django.conf.locale.en import formats as en_formats
+from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env()
@@ -88,7 +89,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ------------------------------------------------------------------------------
 AUTH_USER_MODEL = "user.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "/auth/auth_request/"
+LOGIN_URL = reverse_lazy("auth:auth_request")
 
 
 # PASSWORDS
