@@ -120,7 +120,10 @@ class ReserveSeatsViewTest(TestCase):
             reverse("cinema:reserve_seats", kwargs={"showtime_id": self.showtime.id}),
             {"seat_ids": f"{self.seat1.id},{self.seat2.id}"}
         )
-        self.assertRedirects(response, reverse("cinema:home"))
+        self.assertRedirects(
+            response,
+            reverse("cinema:hall_showtimes", kwargs={"hall_id": self.showtime.hall.id})
+        )
 
         reservation = Reservation.objects.filter(user=self.user, showtime=self.showtime).first()
         self.assertIsNotNone(reservation)
