@@ -42,7 +42,7 @@
     width: 100%;
     height: 600px;
     position: relative;
-    background-image: url("/static/images/HeaderImage.jpg");
+    background-image: url("/static/images/HeaderImage.jpeg");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -50,7 +50,7 @@
 }
 
 .hall-image {
-    background-image: url("/static/images/HallHeaderImage.jpg");
+    background-image: url("/static/images/HallHeaderImage.jpeg");
 }
 
 .header-img-container::after {
