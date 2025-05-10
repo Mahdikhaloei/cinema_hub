@@ -96,7 +96,7 @@ class ReserveSeatsView(LoginRequiredMixin, View):
     def post(self, request: HttpRequest, showtime_id: int) -> HttpResponseRedirect:
         if isinstance(request.user, AnonymousUser):
             messages.error(request, "You must be logged in to make a reservation.")
-            return redirect("cinema:login")
+            return redirect("auth:auth_request")
 
         seat_ids_input = request.POST.get("seat_ids", "")
         seat_ids = [int(i) for i in seat_ids_input.split(",") if i.isdigit()]
